@@ -17,9 +17,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'junit:junit:4.13.1'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client' //mariaDB
+	//runtimeOnly 'org.mariadb.jdbc:mariadb-java-client' //mariaDB
+	implementation 'mysql:mysql-connector-java'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'com.h2database:h2'
 	implementation 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok' //getter,setter사용을 못해서 추가
 }
