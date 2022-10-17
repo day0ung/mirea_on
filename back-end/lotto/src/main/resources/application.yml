@@ -4,6 +4,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver #org.mariadb.jdbc.Driver #com.mysql.cj.jdbc.Driver
     username: user
     password: pwd
+  hikari:
+    auto-commit: false
+    connection-test-query: SELECT 1
+    minimum-idle: 10
+    maximum-pool-size: 30
 
   jpa:
     show-sql: true
