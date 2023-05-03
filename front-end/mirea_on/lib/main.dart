@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mirea_on/pages/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,47 +17,9 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      home: HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
 
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-
-      body: GridView.count(
-          crossAxisCount: 9,
-          children: List.generate(45, (index) {
-            return Center(
-              child: ElevatedButton(
-                child: Text('Button ${index + 1}'),
-                onPressed: () {
-                  // 버튼이 클릭되었을 때의 동작
-                },
-              ),
-            );
-          }),
-      ),
-    );
-  }
-}
