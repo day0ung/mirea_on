@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'colors.dart';
-import 'models/category_model.dart';
+import '../colors.dart';
+import '../models/category_model.dart';
 
 class AppCategoryList extends StatelessWidget {
   const AppCategoryList({Key? key}) : super(key: key);
