@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../colors.dart';
+import '../utils/colors.dart';
 import '../models/app_bottom_bar_item.dart';
 
 class AppBottomBar extends StatefulWidget {

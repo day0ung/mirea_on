@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mirea_on/screens/app_bottom_bar.dart';
-import 'colors.dart';
+import '../utils/colors.dart';
 
-import 'screens/app_menu_list.dart';
-import 'screens/app_header.dart';
-import 'app_mount_listview.dart';
-import 'app_search.dart';
+import 'app_header.dart';
+import '../pages/page_raffle.dart';
+import '../not/app_search.dart';
 
 class MountsApp extends StatelessWidget {
   const MountsApp({Key? key}) : super(key: key);
@@ -49,7 +48,7 @@ class MountsApp extends StatelessWidget {
           Expanded(
             child: AppMountListView(),
           ),
-          AppCategoryList(),
+          //AppCategoryList(),
           AppBottomBar(),
         ],
       ),

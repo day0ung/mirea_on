@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../colors.dart';
-import 'models/model_numbers.dart';
+import '../utils/colors.dart';
+import '../models/model_numbers.dart';
 
 class AppMountListView extends StatelessWidget {
   const AppMountListView({Key? key}) : super(key: key);
