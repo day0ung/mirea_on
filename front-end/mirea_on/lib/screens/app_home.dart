@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mirea_on/screens/app_bottom_bar.dart';
-import '../utils/colors.dart';
+import 'package:mirea_on/utils/colors.dart';
 
 import 'app_header.dart';
 import '../pages/page_raffle.dart';
 import '../not/app_search.dart';
+import 'app_menu_list.dart';
 
 class MountsApp extends StatelessWidget {
   const MountsApp({Key? key}) : super(key: key);
@@ -40,18 +41,28 @@ class MountsApp extends StatelessWidget {
           ),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          AppHeader(),
-          // AppSearch(),
-          Expanded(
-            child: AppMountListView(),
+      body: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              AppHeader(),
+              // AppSearch(),
+              // Expanded(
+              //   child: AppNumberListView(),
+              // ),
+              // AppCategoryList(),
+            ],
           ),
-          //AppCategoryList(),
-          AppBottomBar(),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: AppBottomBar(),
+          ),
         ],
-      ),
+      )
+
     );
   }
 }
