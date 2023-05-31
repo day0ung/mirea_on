@@ -3,13 +3,8 @@ import 'package:mirea_on/pages/page_analyze.dart';
 import 'package:mirea_on/pages/page_home.dart';
 import 'package:mirea_on/pages/page_lottery.dart';
 import 'package:mirea_on/pages/page_profile.dart';
-import 'package:mirea_on/screens/app_bottom_bar.dart';
 import 'package:mirea_on/utils/colors.dart';
 
-import 'app_header.dart';
-import '../pages/page_raffle.dart';
-import '../not/app_search.dart';
-import 'app_menu_list.dart';
 
 class HomeApp extends StatefulWidget {
   const HomeApp({Key? key}) : super(key: key);
@@ -21,9 +16,7 @@ class HomeApp extends StatefulWidget {
 
 class _HomeAppState extends State<HomeApp>{
   int _selectedIndex = 0;
-
-  static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  final PageController _pageController = PageController(initialPage: 0); //슬라이드시 페이지 전환
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(),
@@ -64,7 +57,16 @@ class _HomeAppState extends State<HomeApp>{
           ),
         ),
         body: SafeArea(
-          child: _widgetOptions.elementAt(_selectedIndex),
+          // child: _widgetOptions.elementAt(_selectedIndex),
+          child: PageView(
+            controller: _pageController,
+            children: _widgetOptions,
+            onPageChanged: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+          ),
         ),
         bottomNavigationBar: Container(
           margin: const EdgeInsets.only(top: 7),
@@ -72,7 +74,7 @@ class _HomeAppState extends State<HomeApp>{
           child: BottomNavigationBar(
             backgroundColor: Colors.white,
             type: BottomNavigationBarType.shifting, //default fixed,
-            onTap: _onItemTapped, //클릭 event
+            onTap: _onItemTapped,
             currentIndex: _selectedIndex,
             selectedItemColor: mainColor,
             selectedFontSize: 12,
@@ -98,6 +100,12 @@ class _HomeAppState extends State<HomeApp>{
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _pageController.animateToPage(
+        index,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
     });
   }
 }
+
