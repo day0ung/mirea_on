@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,31 +17,47 @@ class _NumberPageState extends State<NumberPage> {
       appBar: AppBar(
         title: Text('Numbers'),
       ),
-      body: ListView.builder(
-        itemCount: 45, // 번호의 개수를 45로 조정
-        itemBuilder: (context, index) {
+      body: GridView.count(
+        crossAxisCount: 7, // 열의 개수를 7로 설정
+        children: List.generate(45, (index) {
           final number = index + 1;
           final isSelected = selectedNumbers.contains(number);
-          return ListTile(
-            title: Text('Number $number'),
+          return GestureDetector(
             onTap: () {
               setState(() {
                 if (isSelected) {
                   selectedNumbers.remove(number);
                 } else {
-                  if (selectedNumbers.length < 6) { // 선택 개수가 6개 미만일 때만 추가
+                  if (selectedNumbers.length < 6) {
                     selectedNumbers.add(number);
                   }
                 }
               });
             },
-            tileColor: isSelected ? Colors.blue : null,
+            child: Container(
+              margin: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isSelected ? Colors.blue : null,
+                border: Border.all(),
+              ),
+              child: Center(
+                child: Text('$number'),
+              ),
+            ),
           );
-        },
+        }),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pop(context, selectedNumbers); // 선택한 번호들을 배열로 전달하고 이전 페이지로 이동
+          List<int> resultNumbers = selectedNumbers.toList();
+          while (resultNumbers.length < 6) {
+            int randomNumber = Random().nextInt(45) + 1;
+            if (!resultNumbers.contains(randomNumber)) {
+              resultNumbers.add(randomNumber);
+            }
+          }
+          resultNumbers.sort();
+          Navigator.pop(context, resultNumbers);
         },
         child: Icon(Icons.check),
       ),
