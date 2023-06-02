@@ -11,27 +11,33 @@ class _LotteryPage extends State<LotteryPage>{
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 20, right: 20),
-      decoration: BoxDecoration(
-        color: Colors.blue, // 블루로 설정
-      ),
-      child: Row(
-        children: [
-          const SizedBox( height: 150),
+    return Scrollbar(
+      child: ListView(
+        restorationId: 'list_demo_list_view',
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                '프로필 페이지',
-                style:
-                TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+        // EdgeInsets.symmetric(vertical: 8) - 위 아래에 여백으로 8 픽셀을 추가합니다.
+        padding: const EdgeInsets.symmetric(vertical: 8),
+
+        children: [
+
+          // 20개의 ListTile 위젯을 자식 위젯으로 추가합니다.
+          for (int index = 1; index < 21; index++)
+
+            ListTile(
+
+              // 숫자가 적힌 동그라미를 아이콘 자리에 배치합니다.
+                leading: ExcludeSemantics(
+                  child: CircleAvatar(child: Text('$index')),
+                ),
+
+                title: Text(
+                  "Title",
+                ),
+                subtitle: Text("subtitle")
+            ),
         ],
       ),
     );
+
   }
 }

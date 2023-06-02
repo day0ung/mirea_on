@@ -14,7 +14,7 @@ class SplashPage extends StatelessWidget {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const MountsApp(),
+              builder: (context) => const HomeApp(),
             ));
       },
     );

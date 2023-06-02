@@ -13,9 +13,6 @@ class _AnalyzePage extends State<AnalyzePage>{
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20),
-      decoration: BoxDecoration(
-        color: Colors.blue, // 블루로 설정
-      ),
       child: Row(
         children: [
           const SizedBox( height: 150),

@@ -57,7 +57,6 @@ class _HomeAppState extends State<HomeApp>{
           ),
         ),
         body: SafeArea(
-          // child: _widgetOptions.elementAt(_selectedIndex),
           child: PageView(
             controller: _pageController,
             children: _widgetOptions,
@@ -69,8 +68,8 @@ class _HomeAppState extends State<HomeApp>{
           ),
         ),
         bottomNavigationBar: Container(
+          color: Colors.white,
           margin: const EdgeInsets.only(top: 7),
-          padding: const EdgeInsets.all(3),
           child: BottomNavigationBar(
             backgroundColor: Colors.white,
             type: BottomNavigationBarType.shifting, //default fixed,
@@ -102,7 +101,7 @@ class _HomeAppState extends State<HomeApp>{
       _selectedIndex = index;
       _pageController.animateToPage(
         index,
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 50),
         curve: Curves.easeInOut,
       );
     });
