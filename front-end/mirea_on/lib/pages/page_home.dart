@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/decoration.dart';
 
 
 class HomePage extends StatefulWidget{
@@ -14,26 +15,14 @@ class _HomePage extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 5, right: 5),
-      // margin: const EdgeInsets.only(left: 5, right: 5),
-      color: Colors.blue,
+      padding: const EdgeInsets.all(5),
+      // margin: const EdgeInsets.only(left: 3, right: 3),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(4),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            height: 130,
+            decoration: CardDecoration(),
+            height: 160,
             child: Row(
               children: [
                 Text('첫째줄 텍스트'),
@@ -42,9 +31,11 @@ class _HomePage extends State<HomePage> {
           ),
           Expanded(
             child: Container(
-              margin: const EdgeInsets.only(top: 15),
-              color: Colors.green,
+              margin: const EdgeInsets.only(top: 20),
               child: GridView.count(
+                childAspectRatio: 0.7, // 너비:높이 비율 조절
+                mainAxisSpacing: 15, // 아이템 간의 수직 간격
+                crossAxisSpacing: 12, // 아이템 간의 수평 간격
                 crossAxisCount: 2,
                 children: [
                   ...cards.map((card) => CardItem(text: card)).toList(),
@@ -73,8 +64,7 @@ class CardItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(8),
-      color: Colors.white,
+      decoration: CardDecoration(color: Colors.deepOrange.shade50),
       child: Center(
         child: Text(text),
       ),
@@ -90,8 +80,8 @@ class CardButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(8),
-      color: Colors.white,
+      margin: const EdgeInsets.all(1),
+      decoration: CardDecoration(),
       child: InkWell(
         onTap: onPressed,
         child: Center(
