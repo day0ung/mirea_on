@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../models/numbers.dart';
 import '../utils/decoration.dart';
 
 
@@ -10,7 +11,9 @@ class HomePage extends StatefulWidget{
 }
 
 class _HomePage extends State<HomePage> {
-  List<String> cards = [];
+  List<List<int>> grids = [];
+
+  List<int> selectedNumbers = [];
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +41,16 @@ class _HomePage extends State<HomePage> {
                 crossAxisSpacing: 12, // 아이템 간의 수평 간격
                 crossAxisCount: 2,
                 children: [
-                  ...cards.map((card) => CardItem(text: card)).toList(),
-                  CardButton(onPressed: addCard),
+                  for (var grid in grids) // 변경: grids 리스트를 반복하여 그리드 생성
+                    CardItem(text: grid.toString()),
+                  CardButton(
+                    onNumbersSelected: (numbers) {
+                      setState(() {
+                        selectedNumbers = numbers;
+                        grids.add(numbers); // 변경: grids에 선택한 숫자 그리드 추가
+                      });
+                    },
+                  ),
                 ],
               ),
             ),
@@ -47,12 +58,6 @@ class _HomePage extends State<HomePage> {
         ],
       ),
     );
-  }
-
-  void addCard() {
-    setState(() {
-      cards.add('New Card');
-    });
   }
 }
 
@@ -72,10 +77,11 @@ class CardItem extends StatelessWidget {
   }
 }
 
-class CardButton extends StatelessWidget {
-  final VoidCallback onPressed;
 
-  const CardButton({required this.onPressed});
+class CardButton extends StatelessWidget {
+  final void Function(List<int>)? onNumbersSelected;
+
+  const CardButton({this.onNumbersSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +89,16 @@ class CardButton extends StatelessWidget {
       margin: const EdgeInsets.all(1),
       decoration: CardDecoration(),
       child: InkWell(
-        onTap: onPressed,
+        onTap: () async {
+          final selectedNumbers = await Navigator.push<List<int>>(
+            context,
+            MaterialPageRoute(builder: (context) => NumberPage()),
+          );
+
+          if (selectedNumbers != null && onNumbersSelected != null) {
+            onNumbersSelected!(selectedNumbers);
+          }
+        },
         child: Center(
           child: Icon(Icons.add),
         ),
