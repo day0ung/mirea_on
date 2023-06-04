@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mirea_on/pages/page_splash.dart';
+import 'package:mirea_on/screens/app_splash.dart';
 
 void main() {
   runApp(const MyApp());

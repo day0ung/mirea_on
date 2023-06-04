@@ -1,43 +1,81 @@
 import 'package:flutter/material.dart';
 
-class LotteryPage extends StatefulWidget{
+import '../widgets/lottery/algorithm_raffle.dart';
+import '../widgets/lottery/basic_raffle.dart';
+import '../widgets/lottery/colors_raffle.dart';
+import '../widgets/lottery/sniffling_raffle.dart';
+
+class LotteryPage extends StatefulWidget {
   const LotteryPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget>  createState() => _LotteryPage();
+  State<StatefulWidget> createState() => _LotteryPageState();
 }
 
-class _LotteryPage extends State<LotteryPage>{
+class _LotteryPageState extends State<LotteryPage> {
+  static final List<Widget> _widgetOptions = <Widget>[
+    BasicWidget(),
+    SnifflingWidget(),
+    ColorsWidget(),
+    AlgorithmWidget(),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Scrollbar(
-      child: ListView(
-        restorationId: 'list_demo_list_view',
-
-        // EdgeInsets.symmetric(vertical: 8) - 위 아래에 여백으로 8 픽셀을 추가합니다.
-        padding: const EdgeInsets.symmetric(vertical: 8),
-
-        children: [
-
-          // 20개의 ListTile 위젯을 자식 위젯으로 추가합니다.
-          for (int index = 1; index < 21; index++)
-
-            ListTile(
-
-              // 숫자가 적힌 동그라미를 아이콘 자리에 배치합니다.
-                leading: ExcludeSemantics(
-                  child: CircleAvatar(child: Text('$index')),
-                ),
-
-                title: Text(
-                  "Title",
-                ),
-                subtitle: Text("subtitle")
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: const Center(
+          child: Icon(
+            Icons.terrain,
+            size: 40,
+          ),
+        ),
+        actions: const [
+          SizedBox(width: 30, height: 30),
         ],
       ),
+      body: Container(
+        padding: const EdgeInsets.all(5),
+        child: ListView.separated(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          itemCount: _widgetOptions.length,
+          separatorBuilder: (BuildContext context, int index) =>
+              SizedBox(height: 10),
+          itemBuilder: (BuildContext context, int index) {
+            return InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => _widgetOptions[index]),
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: ListTile(
+                  leading: ExcludeSemantics(
+                    child: CircleAvatar(child: Text('d')),
+                  ),
+                  title: Text("Title"),
+                  subtitle: Text("Subtitle"),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
-
   }
 }

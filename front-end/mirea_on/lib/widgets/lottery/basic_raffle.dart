@@ -3,14 +3,15 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/colors.dart';
+import '../../utils/colors.dart';
 
-class NumberPage extends StatefulWidget {
+
+class BasicWidget extends StatefulWidget {
   @override
-  _NumberPageState createState() => _NumberPageState();
+  _BasicWidget createState() => _BasicWidget();
 }
 
-class _NumberPageState extends State<NumberPage> {
+class _BasicWidget extends State<BasicWidget> {
   List<int> selectedNumbers = [];
 
   @override

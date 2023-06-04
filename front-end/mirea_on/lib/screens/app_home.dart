@@ -28,34 +28,6 @@ class _HomeAppState extends State<HomeApp>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          title: const Center(
-            child: Icon(
-              Icons.terrain,
-              color: mainColor,
-              size: 40,
-            ),
-          ),
-          actions: const [
-            SizedBox(width: 30, height: 30),
-          ],
-          iconTheme: const IconThemeData(color: mainColor),
-        ),
-        drawer: Drawer(
-          child: Container(
-            padding: const EdgeInsets.all(30),
-            color: mainColor,
-            alignment: Alignment.bottomLeft,
-            child: const Icon(
-              Icons.terrain,
-              color: Colors.white,
-              size: 50,
-            ),
-          ),
-        ),
         body: SafeArea(
           child: PageView(
             controller: _pageController,
@@ -75,19 +47,15 @@ class _HomeAppState extends State<HomeApp>{
             type: BottomNavigationBarType.shifting, //default fixed,
             onTap: _onItemTapped,
             currentIndex: _selectedIndex,
-            selectedItemColor: mainColor,
+            selectedItemColor: ColorUtils.mainColor,
             selectedFontSize: 12,
             iconSize: 30,
             unselectedItemColor: Colors.grey,
             items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home), label: '홈'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.generating_tokens_outlined), label: '추첨'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.analytics_outlined), label: '분석'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.person_outline), label: '마이'),
+              BottomNavigationBarItem( icon: Icon(Icons.home), label: '홈'),
+              BottomNavigationBarItem( icon: Icon(Icons.generating_tokens_outlined), label: '뽑기'),
+              BottomNavigationBarItem( icon: Icon(Icons.analytics_outlined), label: '분석'),
+              BottomNavigationBarItem( icon: Icon(Icons.person_outline), label: '마이'),
             ],
 
           ),

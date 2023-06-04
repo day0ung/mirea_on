@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../utils/colors.dart';
-import '../screens/app_home.dart';
+import 'app_home.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -9,7 +9,7 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(seconds: 1),
       () {
         Navigator.pushReplacement(
             context,
@@ -20,7 +20,7 @@ class SplashPage extends StatelessWidget {
     );
 
     return Container(
-      color: mainColor,
+      color: ColorUtils.mainColor,
       child: Stack(
         children: [
           const Align(
