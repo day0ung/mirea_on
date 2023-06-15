@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../utils/colors.dart';
 import '../widgets/lottery/algorithm_raffle.dart';
 import '../widgets/lottery/basic_raffle.dart';
 import '../widgets/lottery/colors_raffle.dart';
 import '../widgets/lottery/sniffling_raffle.dart';
+
 
 class LotteryPage extends StatefulWidget {
   const LotteryPage({Key? key}) : super(key: key);
@@ -23,12 +25,14 @@ class _LotteryPageState extends State<LotteryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: const Center(
           child: Icon(
-            Icons.terrain,
+            Icons.generating_tokens,
+            color: ColorUtils.mainColor,
             size: 40,
           ),
         ),
