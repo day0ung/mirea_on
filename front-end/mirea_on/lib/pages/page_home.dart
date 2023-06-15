@@ -46,6 +46,13 @@ class _HomePage extends State<HomePage> {
     await _prefs.setStringList('grids', gridStrings);
   }
 
+  Future<void> _deleteGrid(int index) async {
+    setState(() {
+      grids.removeAt(index); // 그리드 삭제
+      saveGrids(); // 그리드 저장
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +99,10 @@ class _HomePage extends State<HomePage> {
                   ),
                   itemBuilder: (context, index) {
                     if (index < grids.length) {
-                      return CardItem(text: grids[index].toString());
+                      return CardItem(
+                          text: grids[index].toString(),
+                          onDelete: () => _deleteGrid(index),
+                      );
                     } else {
                       return CardButton(
                         onNumbersSelected: (numbers) {
@@ -117,15 +127,27 @@ class _HomePage extends State<HomePage> {
 
 class CardItem extends StatelessWidget {
   final String text;
-
-  const CardItem({required this.text});
+  final VoidCallback onDelete;
+  const CardItem({required this.text, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: CardDecoration(color: Colors.deepOrange.shade50),
-      child: Center(
-        child: Text(text),
+      child: Stack(
+        children: [
+          Center(
+            child: Text(text),
+          ),
+          Positioned(
+            top: 5,
+            right: 5,
+            child: IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: onDelete
+            ),
+          ),
+        ],
       ),
     );
   }
