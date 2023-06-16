@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/colors.dart';
+import '../../utils/shared_preferences_manager.dart';
 
 
 class BasicWidget extends StatefulWidget {
@@ -14,11 +15,23 @@ class BasicWidget extends StatefulWidget {
 class _BasicWidget extends State<BasicWidget> {
   List<int> selectedNumbers = [];
 
+  late SharedPreferencesManager _sharedPreferencesManager;
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferencesManager.getInstance().then((instance) {
+      setState(() {
+        _sharedPreferencesManager = instance;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Numbers'),
+        title: Text('기본 뽑기'),
       ),
       body: GridView.count(
         crossAxisCount: 7,
@@ -49,9 +62,7 @@ class _BasicWidget extends State<BasicWidget> {
                 boxShadow: [
                   BoxShadow(
                     color: ColorUtils.getColorForNumber(number),
-                    // spreadRadius: 1,
                     blurRadius: 2,
-                    // offset: Offset(0, 2),
                   ),
                 ],
               ),
@@ -68,7 +79,7 @@ class _BasicWidget extends State<BasicWidget> {
         }),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           List<int> resultNumbers = selectedNumbers.toList();
           while (resultNumbers.length < 6) {
             int randomNumber = Random().nextInt(45) + 1;
@@ -77,6 +88,10 @@ class _BasicWidget extends State<BasicWidget> {
             }
           }
           resultNumbers.sort();
+
+          if (_sharedPreferencesManager != null) {
+            await _sharedPreferencesManager.addNumbersToGrid(resultNumbers);
+          }
           Navigator.pop(context, resultNumbers);
         },
         child: Icon(Icons.check),
