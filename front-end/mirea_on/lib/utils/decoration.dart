@@ -1,21 +1,41 @@
 
 import 'package:flutter/material.dart';
 
-class CardDecoration extends BoxDecoration {
-  final Color color;
+import 'colors.dart';
 
-  CardDecoration({this.color = Colors.white})
-      : super(
-        color: color,
-        borderRadius: BorderRadius.circular(4),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: Offset(0, 3),
-          ),
-        ],
-      );
+class DecorationUtils {
+
+  static BoxDecoration buildCustomCardDecoration({Color color = Colors.white}) {
+    return BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.circular(4),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 1,
+          blurRadius: 3,
+          offset: Offset(0, 3),
+        ),
+      ],
+    );
+  }
+
+  static BoxDecoration buildCustomBoxDecoration({
+    bool isSelected = false,
+    Color color = Colors.white,
+    required int number,
+  }) {
+    return BoxDecoration(
+      color: isSelected ? color : Colors.white,
+      border: Border.all(color: color),
+      borderRadius: BorderRadius.circular(30),
+      boxShadow: [
+        BoxShadow(
+          color: ColorUtils.getColorForNumber(number),
+          blurRadius: 2,
+        ),
+      ],
+    );
+  }
 
 }

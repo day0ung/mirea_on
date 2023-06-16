@@ -13,7 +13,7 @@ class _AlgorithmWidget extends State<AlgorithmWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('AlgorithmWidget'),
+        title: Text('AI 뽑기'),
       ),
       body: Center(
         child: Text('AlgorithmWidget Page'),

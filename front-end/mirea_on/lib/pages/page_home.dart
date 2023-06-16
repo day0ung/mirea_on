@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mirea_on/utils/colors.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/decoration.dart';
 import '../utils/shared_preferences_manager.dart';
 import '../widgets/lottery/basic_raffle.dart';
@@ -55,7 +54,7 @@ class _HomePage extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              decoration: CardDecoration(),
+              decoration: DecorationUtils.buildCustomCardDecoration(),
               height: 160,
               child: Row(
                 children: [
@@ -77,7 +76,7 @@ class _HomePage extends State<HomePage> {
                   itemBuilder: (context, index) {
                     if (index < grids.length) {
                       return CardItem(
-                        text: grids[index].toString(),
+                        numbers: grids[index],
                         onDelete: () async {
                           await _sharedPreferencesManager.deleteGrid(index);
                           setState(() {
@@ -106,24 +105,47 @@ class _HomePage extends State<HomePage> {
 }
 
 class CardItem extends StatelessWidget {
-  final String text;
+  final List<int> numbers;
   final VoidCallback onDelete;
-  const CardItem({required this.text, required this.onDelete});
+
+  const CardItem({required this.numbers, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: CardDecoration(color: Colors.deepOrange.shade50),
+      decoration: DecorationUtils.buildCustomCardDecoration(color: Colors.deepOrange.shade50),
       child: Stack(
         children: [
           Center(
-            child: Text(text),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: numbers.map((number) {
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 2),
+                  width: 23,
+                  height: 23,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: ColorUtils.getColorForNumber(number),
+                  ),
+                  child: Center(
+                    child: Text(
+                      number.toString(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
           ),
           Positioned(
-            top: 5,
+            bottom: 5,
             right: 5,
             child: IconButton(
-              icon: Icon(Icons.delete, color: Colors.grey),
+              icon: Icon(Icons.delete, color: Colors.deepOrange.shade200),
               onPressed: onDelete,
             ),
           ),
@@ -132,6 +154,7 @@ class CardItem extends StatelessWidget {
     );
   }
 }
+
 
 class CardButton extends StatelessWidget {
   final void Function(List<int>)? onNumbersSelected;
@@ -142,7 +165,7 @@ class CardButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(1),
-      decoration: CardDecoration(),
+      decoration: DecorationUtils.buildCustomCardDecoration(),
       child: InkWell(
         onTap: () async {
           final selectedNumbers = await Navigator.push<List<int>>(
@@ -155,7 +178,7 @@ class CardButton extends StatelessWidget {
           }
         },
         child: Center(
-          child: Icon(Icons.add, color: Colors.grey),
+          child: Icon(Icons.add, color: Colors.deepOrange.shade900),
         ),
       ),
     );

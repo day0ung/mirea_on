@@ -13,7 +13,7 @@ class _ColorsWidget extends State<ColorsWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ColorWidget'),
+        title: Text('색상 뽑기'),
       ),
       body: Center(
         child: Text('ColorWidget Page'),

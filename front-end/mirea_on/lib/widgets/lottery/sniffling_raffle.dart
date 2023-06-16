@@ -13,7 +13,7 @@ class _SnifflingWidget extends State<SnifflingWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('AlgorithmWidget'),
+        title: Text('홀짝 뽑기'),
       ),
       body: Center(
         child: Text('AlgorithmWidget Page'),

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mirea_on/utils/decoration.dart';
 
 import '../../utils/colors.dart';
 import '../../utils/shared_preferences_manager.dart';
@@ -55,16 +56,10 @@ class _BasicWidget extends State<BasicWidget> {
             },
             child: Container(
               margin: EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: isSelected ? color : Colors.white,
-                border: Border.all(color: color),
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [
-                  BoxShadow(
-                    color: ColorUtils.getColorForNumber(number),
-                    blurRadius: 2,
-                  ),
-                ],
+              decoration: DecorationUtils.buildCustomBoxDecoration(
+                isSelected: isSelected,
+                color: color,
+                number: number,
               ),
               child: Center(
                 child: Text(
