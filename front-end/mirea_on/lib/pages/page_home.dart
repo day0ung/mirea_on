@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mirea_on/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/decoration.dart';
+import '../utils/shared_preferences_manager.dart';
 import '../widgets/lottery/basic_raffle.dart';
 
 
@@ -16,40 +17,16 @@ class HomePage extends StatefulWidget{
 class _HomePage extends State<HomePage> {
   List<List<int>> grids = [];
   List<int> selectedNumbers = [];
-
-  late SharedPreferences _prefs;
+  late SharedPreferencesManager _sharedPreferencesManager;
 
   @override
   void initState() {
     super.initState();
-    loadGrids();
-  }
-
-  Future<void> loadGrids() async {
-    _prefs = await SharedPreferences.getInstance();
-    final savedGrids = _prefs.getStringList('grids');
-    if (savedGrids != null) {
+    SharedPreferencesManager.getInstance().then((instance) {
       setState(() {
-        grids = savedGrids
-            .map((grid) => grid.split(',').map(int.parse).toList())
-            .toList();
+        _sharedPreferencesManager = instance;
+        grids = _sharedPreferencesManager.grids;
       });
-    } else {
-      setState(() {
-        grids = []; // 그리드 리스트 초기화
-      });
-    }
-  }
-
-  Future<void> saveGrids() async {
-    final gridStrings = grids.map((grid) => grid.join(',')).toList();
-    await _prefs.setStringList('grids', gridStrings);
-  }
-
-  Future<void> _deleteGrid(int index) async {
-    setState(() {
-      grids.removeAt(index); // 그리드 삭제
-      saveGrids(); // 그리드 저장
     });
   }
 
@@ -100,16 +77,19 @@ class _HomePage extends State<HomePage> {
                   itemBuilder: (context, index) {
                     if (index < grids.length) {
                       return CardItem(
-                          text: grids[index].toString(),
-                          onDelete: () => _deleteGrid(index),
+                        text: grids[index].toString(),
+                        onDelete: () async {
+                          await _sharedPreferencesManager.deleteGrid(index);
+                          setState(() {
+                            grids = _sharedPreferencesManager.grids;
+                          });
+                        },
                       );
                     } else {
                       return CardButton(
-                        onNumbersSelected: (numbers) {
+                        onNumbersSelected: (numbers) async {
                           setState(() {
-                            selectedNumbers = numbers;
-                            grids.add(numbers); // 선택한 그리드를 추가
-                            saveGrids(); // 그리드 저장
+                            grids = _sharedPreferencesManager.grids;
                           });
                         },
                       );
@@ -143,8 +123,8 @@ class CardItem extends StatelessWidget {
             top: 5,
             right: 5,
             child: IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: onDelete
+              icon: Icon(Icons.delete, color: Colors.grey),
+              onPressed: onDelete,
             ),
           ),
         ],
@@ -175,7 +155,7 @@ class CardButton extends StatelessWidget {
           }
         },
         child: Center(
-          child: Icon(Icons.add),
+          child: Icon(Icons.add, color: Colors.grey),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../screens/app_home.dart';
 import '../utils/colors.dart';
 import '../widgets/lottery/algorithm_raffle.dart';
 import '../widgets/lottery/basic_raffle.dart';
@@ -21,6 +22,8 @@ class _LotteryPageState extends State<LotteryPage> {
     ColorsWidget(),
     AlgorithmWidget(),
   ];
+
+  List<int> selectedNumbers = [];
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +48,18 @@ class _LotteryPageState extends State<LotteryPage> {
         child: ListView.separated(
           padding: const EdgeInsets.symmetric(vertical: 8),
           itemCount: _widgetOptions.length,
-          separatorBuilder: (BuildContext context, int index) =>
-              SizedBox(height: 10),
+          separatorBuilder: (BuildContext context, int index) => SizedBox(height: 10),
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
-              onTap: () {
-                Navigator.push(
+              onTap: () async {
+                await Navigator.push<List<int>>(
                   context,
                   MaterialPageRoute(builder: (context) => _widgetOptions[index]),
+                );
+
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeApp()),
                 );
               },
               child: Container(
