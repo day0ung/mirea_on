@@ -14,18 +14,14 @@ class SnifflingWidget extends StatefulWidget {
 }
 
 class _SnifflingWidget extends State<SnifflingWidget> {
-  List<Game> games = [ Game('A'), Game('B'), Game('C'), Game('D'), Game('E')];
-  List<bool> isSelectedList = [];
+  List<Game> games = [ Game('A', true), Game('B', false), Game('C', false), Game('D', false), Game('E', false)];
+  List<String> selectedGameNames = [];
   List<int> selectedNumbers = [];
-
-  String selectedGameText = '';
 
 
   @override
   void initState() {
     super.initState();
-    isSelectedList = List<bool>.filled(games.length, false);
-    isSelectedList[0] = true;
     updateSelectedGameText();
   }
 
@@ -64,10 +60,10 @@ class _SnifflingWidget extends State<SnifflingWidget> {
                       children: List.generate(5, (index) {
                         return BoxWidget(
                           width: boxWidth,
-                          isSelected: isSelectedList[index],
+                          isSelected: games[index].isSelected,
                           onTap: () {
                             setState(() {
-                              isSelectedList[index] = !isSelectedList[index];
+                              games[index].isSelected = !games[index].isSelected;
                               updateSelectedGameText();
                             });
                           },
@@ -89,16 +85,16 @@ class _SnifflingWidget extends State<SnifflingWidget> {
                       border: Border.all(color: Colors.red, width: 1.0),
                     ),
                     child: Column(
-                      mainAxisAlignment: selectedGameText.isNotEmpty
+                      mainAxisAlignment: selectedGameNames.isNotEmpty
                           ? MainAxisAlignment.start
                           : MainAxisAlignment.center,
-                      crossAxisAlignment: selectedGameText.isNotEmpty
+                      crossAxisAlignment: selectedGameNames.isNotEmpty
                           ? CrossAxisAlignment.start
                           : CrossAxisAlignment.center,
                       children: [
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 10,vertical: 3),
-                          child: selectedGameText.isEmpty
+                          child: selectedGameNames.isEmpty
                               ? Center(
                                   child: Text(
                                     '게임을 선택해주세요',
@@ -112,14 +108,15 @@ class _SnifflingWidget extends State<SnifflingWidget> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,  //Text는 왼, Button: 오
                                       children: [
                                         Text(
-                                          selectedGameText +' 게임',
+                                          selectedGameNames.join(",") +' 게임',
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         ElevatedButton(
                                           onPressed: () {
-                                            assignNumbers(selectedGameText);
+                                            assignNumbers();
+
                                           },
                                           child: Text('뽑기'),
                                         ),
@@ -130,7 +127,7 @@ class _SnifflingWidget extends State<SnifflingWidget> {
 
                                 ),
                         ),
-                        if(selectedGameText.isNotEmpty)
+                        if(selectedGameNames.isNotEmpty)
                           Expanded(
                             child: GridView.count(
                               crossAxisCount: 7,
@@ -187,19 +184,25 @@ class _SnifflingWidget extends State<SnifflingWidget> {
   }
 
   void updateSelectedGameText() {
-    selectedGameText = '';
-    List<String> selectedGames = [];
-    for (int i = 0; i < isSelectedList.length; i++) {
-      if (isSelectedList[i]) {
-        selectedGames.add(games[i].name);
-      }
-    }
-    if (selectedGames.isNotEmpty) {
-      selectedGameText = selectedGames.join(', ');
-    }
+    selectedGameNames = games.where((game) => game.isSelected)
+                        .map((game) => game.name)
+                        .toList();
+
   }
 
-  void assignNumbers(selectedGameText) {
+  void assignNumbers() {
+    games.where((game) => game.isSelected).forEach((game) {
+      game.numbers = assignNumbersToGame();
+    });
+
+    selectedNumbers.clear();
+    setState(() {
+      // 화면을 다시 그리기 위해 setState() 호출
+    });
+
+  }
+
+  List<int> assignNumbersToGame() {
     List<int> resultNumbers = selectedNumbers.toList();
     while (resultNumbers.length < 6) {
       int randomNumber = Random().nextInt(45) + 1;
@@ -208,8 +211,7 @@ class _SnifflingWidget extends State<SnifflingWidget> {
       }
     }
     resultNumbers.sort();
-    print(selectedGameText);
-    print(resultNumbers);
+    return resultNumbers;
   }
 
 
