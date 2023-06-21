@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import '../../models/model_game.dart';
 import '../../utils/colors.dart';
 import '../../utils/decoration.dart';
+import '../../utils/shared_preferences_manager.dart';
+import '../widget_choose_box.dart';
+import '../widget_number.dart';
 
 
 class SnifflingWidget extends StatefulWidget {
@@ -18,10 +21,19 @@ class _SnifflingWidget extends State<SnifflingWidget> {
   List<String> selectedGameNames = [];
   List<int> selectedNumbers = [];
 
+  bool numbersAssigned = false;
+
+  late SharedPreferencesManager _sharedPreferencesManager;
+
 
   @override
   void initState() {
     super.initState();
+    SharedPreferencesManager.getInstance().then((instance) {
+      setState(() {
+        _sharedPreferencesManager = instance;
+      });
+    });
     updateSelectedGameText();
   }
 
@@ -34,7 +46,6 @@ class _SnifflingWidget extends State<SnifflingWidget> {
         title: Text(
             '홀짝 뽑기'
         ),
-
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
@@ -47,33 +58,16 @@ class _SnifflingWidget extends State<SnifflingWidget> {
                 decoration: DecorationUtils.buildCustomCardDecoration(),
                 height: 155,
                 width: containerWidth,
-                child: Column(
-                  children: [
-                    Text(
-                      'Choose Boxes',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(5, (index) {
-                        return BoxWidget(
-                          width: boxWidth,
-                          isSelected: games[index].isSelected,
-                          onTap: () {
-                            setState(() {
-                              games[index].isSelected = !games[index].isSelected;
-                              updateSelectedGameText();
-                            });
-                          },
-                          text: '${games[index].name}',
-                          numbers: selectedNumbers,
-                        );
-                      }),
-                    ),
-                  ],
-                ),
+                child: ChooseBoxesColumn(
+                  boxWidth: boxWidth,
+                  games: games,
+                  onBoxTap: (index) {
+                    setState(() {
+                      games[index].isSelected = !games[index].isSelected;
+                      updateSelectedGameText();
+                    });
+                  },
+                )
               ),
               SizedBox(height: 10),
               Expanded(
@@ -116,60 +110,31 @@ class _SnifflingWidget extends State<SnifflingWidget> {
                                         ElevatedButton(
                                           onPressed: () {
                                             assignNumbers();
-
                                           },
                                           child: Text('뽑기'),
                                         ),
                                       ],
                                     ),
-
                                   ],
 
                                 ),
                         ),
                         if(selectedGameNames.isNotEmpty)
                           Expanded(
-                            child: GridView.count(
-                              crossAxisCount: 7,
-                              children: List.generate(45, (index) {
-                                final number = index + 1;
-                                final isSelected = selectedNumbers.contains(number);
-                                final color = ColorUtils.getColorForNumber(number);
-                                final textColor = isSelected ? Colors.white : color;
-
-                                return GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      if (isSelected) {
-                                        selectedNumbers.remove(number);
-                                      } else {
-                                        if (selectedNumbers.length < 6) {
-                                          selectedNumbers.add(number);
-                                        }
-                                      }
-                                    });
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.all(7),
-                                    padding: EdgeInsets.all(4),
-                                    decoration: DecorationUtils.buildCustomNumberDecoration(
-                                      isSelected: isSelected,
-                                      color: color,
-                                      number: number,
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        '$number',
-                                        style: TextStyle(
-                                          color: textColor, fontWeight: FontWeight.bold
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }),
+                            child:  NumberGridView(
+                              numbers: selectedNumbers,
+                              onSelectNumber: (int number) {
+                                setState(() {
+                                  if (selectedNumbers.contains(number)) {
+                                    selectedNumbers.remove(number);
+                                  } else if (selectedNumbers.length < 6) {
+                                    selectedNumbers.add(number);
+                                  }
+                                });
+                              },
                             ),
                         )
+
                       ],
                     ),
                   ),
@@ -193,11 +158,13 @@ class _SnifflingWidget extends State<SnifflingWidget> {
   void assignNumbers() {
     games.where((game) => game.isSelected).forEach((game) {
       game.numbers = assignNumbersToGame();
+      print(game.numbers);
     });
-
+    numbersAssigned = true;
     selectedNumbers.clear();
     setState(() {
       // 화면을 다시 그리기 위해 setState() 호출
+
     });
 
   }
@@ -217,86 +184,6 @@ class _SnifflingWidget extends State<SnifflingWidget> {
 
 }
 
-class BoxWidget extends StatelessWidget {
-  final double width;
-  final bool isSelected;
-  final VoidCallback onTap;
-  final String text;
-  final List<int> numbers;
 
-  BoxWidget({
-    required this.width,
-    required this.isSelected,
-    required this.onTap,
-    required this.text,
-    required this.numbers
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 2),
-        width: width,
-        height: 120,
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.red : Colors.white,
-          border: Border.all(
-            color: isSelected ? Colors.redAccent : Colors.grey.shade300,
-            width: 1.0,
-          ),
-        ),
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: Column(
-            children: [
-              Container(
-                height: 15,
-                padding: const EdgeInsets.only(bottom: 1),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: isSelected ? Colors.white : Colors.redAccent,
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      text,
-                      style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.redAccent,
-                        fontSize: 14,
-                        height: 1.1,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      '1000원',
-                      style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.redAccent,
-                        height: 1.1,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 34),
-              isSelected
-                  ? Icon(
-                      Icons.check,
-                      color: Colors.white,
-                    )
-                  : Icon(
-                      Icons.add,
-                      color: Colors.grey,
-                    ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+
