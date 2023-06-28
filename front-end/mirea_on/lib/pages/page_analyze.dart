@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../models/model_tilelist.dart';
 import '../utils/colors.dart';
-import '../widgets/lottery/algorithm_raffle.dart';
-import '../widgets/lottery/basic_raffle.dart';
-import '../widgets/lottery/colors_raffle.dart';
-import '../widgets/lottery/sniffling_raffle.dart';
+
 
 class AnalyzePage extends StatefulWidget{
   const AnalyzePage({Key? key}) : super(key: key);
@@ -14,12 +12,7 @@ class AnalyzePage extends StatefulWidget{
 }
 
 class _AnalyzePage extends State<AnalyzePage>{
-  static final List<Widget> _widgetOptions = <Widget>[
-    BasicWidget(),
-    SnifflingWidget(),
-    ColorsWidget(),
-    AlgorithmWidget(),
-  ];
+  static final List<WidgetTile> tileList = Analyzetiles.analyzeTiles;
 
   @override
   Widget build(BuildContext context) {
@@ -42,37 +35,37 @@ class _AnalyzePage extends State<AnalyzePage>{
       body: Container(
         padding: const EdgeInsets.all(5),
         child: ListView.separated(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          itemCount: _widgetOptions.length,
-          separatorBuilder: (BuildContext context, int index) =>
-              SizedBox(height: 10),
+          itemCount: tileList.length,
+          separatorBuilder: (BuildContext context, int index) => SizedBox(height: 10),
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
-              onTap: () {
-                Navigator.push(
+              onTap: () async {
+                await Navigator.push<List<int>>(
                   context,
-                  MaterialPageRoute(builder: (context) => _widgetOptions[index]),
+                  MaterialPageRoute(builder: (context) => tileList[index].widget),
                 );
+
               },
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(3),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
+                      color: Colors.grey.withOpacity(0.4),
                       spreadRadius: 2,
-                      blurRadius: 5,
+                      blurRadius: 2,
                       offset: Offset(0, 3),
                     ),
                   ],
                 ),
                 child: ListTile(
                   leading: ExcludeSemantics(
-                    child: CircleAvatar(child: Text('d')),
+                      child:
+                      CircleAvatar(child: Icon(tileList[index].icon ,color: Colors.white,), backgroundColor: Colors.lightBlueAccent,)
                   ),
-                  title: Text("Title"),
-                  subtitle: Text("Subtitle"),
+                  title: Text(tileList[index].title),
+                  subtitle: Text(tileList[index].subTitle),
                 ),
               ),
             );

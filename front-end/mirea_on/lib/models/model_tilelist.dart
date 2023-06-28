@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/analyze/color_analyze.dart';
+import '../widgets/analyze/history_analyze.dart';
+import '../widgets/analyze/number_analyze.dart';
+import '../widgets/analyze/snliffling_analyze.dart';
 import '../widgets/lottery/algorithm_raffle.dart';
 import '../widgets/lottery/basic_raffle.dart';
 import '../widgets/lottery/colors_raffle.dart';
@@ -24,4 +28,17 @@ class RaffleTiles {
   ];
 
   static List<WidgetTile> get raffleTiles => _raffleTiles;
+}
+
+class Analyzetiles{
+
+  static final List<WidgetTile> _analyzeTiles = [
+    WidgetTile(HistoryAnalyzeWidget(), Icons.history_outlined, '당첨이력', '모든 회차의 당첨이력 확인'),
+    WidgetTile(SnlifflingAnalyzeWidget(), Icons.science_outlined, '홀짝통계', '회차별로 홀짝 비율 및 번호합 확인'),
+    WidgetTile(ColorAnalyzeWidget(), Icons.format_color_fill, '색상통계', '회차별로 당첨번호 색상 확인'),
+    WidgetTile(NumberAnalyzeWidget(), Icons.numbers, '번호통계', '기간별로 당첨번호 출현횟수, 빈도수 확인'),
+  ];
+
+  static List<WidgetTile> get analyzeTiles => _analyzeTiles;
+
 }
