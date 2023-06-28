@@ -63,7 +63,8 @@ class _SnifflingWidget extends State<SnifflingWidget> {
                   games: games,
                   onBoxTap: (index) {
                     setState(() {
-                      games[index].isSelected = !games[index].isSelected;
+                      //A게임은 무조건 선택되도록
+                      games[index].isSelected = index == 0 ? true : !games[index].isSelected;
                       updateSelectedGameText();
                     });
                   },
@@ -78,65 +79,9 @@ class _SnifflingWidget extends State<SnifflingWidget> {
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.red, width: 1.0),
                     ),
-                    child: Column(
-                      mainAxisAlignment: selectedGameNames.isNotEmpty
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.center,
-                      crossAxisAlignment: selectedGameNames.isNotEmpty
-                          ? CrossAxisAlignment.start
-                          : CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 3),
-                          child: selectedGameNames.isEmpty
-                              ? Center(
-                                  child: Text(
-                                    '게임을 선택해주세요',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                )
-                              : Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,  //Text는 왼, Button: 오
-                                      children: [
-                                        Text(
-                                          selectedGameNames.join(",") +' 게임',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            assignNumbers();
-                                          },
-                                          child: Text('뽑기'),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-
-                                ),
-                        ),
-                        if(selectedGameNames.isNotEmpty)
-                          Expanded(
-                            child:  NumberGridView(
-                              numbers: selectedNumbers,
-                              onSelectNumber: (int number) {
-                                setState(() {
-                                  if (selectedNumbers.contains(number)) {
-                                    selectedNumbers.remove(number);
-                                  } else if (selectedNumbers.length < 6) {
-                                    selectedNumbers.add(number);
-                                  }
-                                });
-                              },
-                            ),
-                        )
-
-                      ],
-                    ),
+                    child: numbersAssigned
+                        ? buildAssignedNumbersColumn()
+                        : buildSelectNumbersColumn(),
                   ),
                 ),
               ),
@@ -144,7 +89,6 @@ class _SnifflingWidget extends State<SnifflingWidget> {
           );
         },
       ),
-
     );
   }
 
@@ -164,7 +108,6 @@ class _SnifflingWidget extends State<SnifflingWidget> {
     selectedNumbers.clear();
     setState(() {
       // 화면을 다시 그리기 위해 setState() 호출
-
     });
 
   }
@@ -179,6 +122,132 @@ class _SnifflingWidget extends State<SnifflingWidget> {
     }
     resultNumbers.sort();
     return resultNumbers;
+  }
+
+  Widget buildAssignedNumbersColumn() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '선택한 번호',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      assignNumbers();
+                    },
+                    child: Text('다시 뽑기'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: selectedGameNames.length,
+            itemBuilder: (context, index) {
+              String gameName = selectedGameNames[index];
+              List<int> gameNumbers =
+                  games.firstWhere((game) => game.name == gameName).numbers;
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      gameName,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: gameNumbers.map((number) {
+                        return Container(
+                          margin: EdgeInsets.symmetric(horizontal: 2),
+                          width: 23,
+                          height: 23,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: ColorUtils.getColorForNumber(number),
+                          ),
+                          child: Center(
+                            child: Text(
+                              number.toString(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+
+  Widget buildSelectNumbersColumn() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    selectedGameNames.join(", ") + ' 게임',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      assignNumbers();
+                    },
+                    child: Text('뽑기'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: NumberGridView(
+            numbers: selectedNumbers,
+            onSelectNumber: (int number) {
+              setState(() {
+                if (selectedNumbers.contains(number)) {
+                  selectedNumbers.remove(number);
+                } else if (selectedNumbers.length < 6) {
+                  selectedNumbers.add(number);
+                }
+              });
+            },
+          ),
+        ),
+      ],
+    );
   }
 
 
