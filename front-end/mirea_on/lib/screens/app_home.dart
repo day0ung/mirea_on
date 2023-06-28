@@ -69,7 +69,7 @@ class _HomeAppState extends State<HomeApp>{
       _selectedIndex = index;
       _pageController.animateToPage(
         index,
-        duration: const Duration(milliseconds: 50),
+        duration: const Duration(milliseconds: 10),
         curve: Curves.easeInOut,
       );
     });

@@ -38,4 +38,40 @@ class DecorationUtils {
     );
   }
 
+  static BoxDecoration buildCustomNumberDecoration({
+    bool isSelected = false,
+    Color color = Colors.white,
+    required int number,
+  }) {
+    return BoxDecoration(
+      color: isSelected ? color : Colors.white,
+      border: Border.all(color: color),
+      borderRadius:  BorderRadius.circular(0),
+      boxShadow: [
+        BoxShadow(
+          color: ColorUtils.getColorForNumber(number),
+          blurRadius: 2,
+        ),
+      ],
+    );
+  }
+
+  static BoxDecoration buildCustomBoxDecorationRaffle({
+    bool isSelected = false,
+    Color color = Colors.white,
+    required int number,
+  }) {
+    return BoxDecoration(
+      color: isSelected ? color : Colors.white,
+      border: Border.all(color: color),
+      borderRadius: BorderRadius.circular(30),
+      boxShadow: [
+        BoxShadow(
+          color: ColorUtils.getColorForNumber(number),
+          blurRadius: 2,
+        ),
+      ],
+    );
+  }
+
 }

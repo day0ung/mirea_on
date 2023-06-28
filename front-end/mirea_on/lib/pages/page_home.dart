@@ -38,7 +38,7 @@ class _HomePage extends State<HomePage> {
         backgroundColor: Colors.transparent,
         title: const Center(
           child: Icon(
-            Icons.terrain,
+            Icons.home,
             color: ColorUtils.mainColor,
             size: 40,
           ),
